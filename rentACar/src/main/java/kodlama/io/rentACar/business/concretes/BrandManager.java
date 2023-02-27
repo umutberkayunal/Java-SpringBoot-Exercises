@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import kodlama.io.rentACar.business.abstracts.BrandService;
 import kodlama.io.rentACar.business.responses.GetByIdBrandResponse;
+import kodlama.io.rentACar.business.rules.BrandBusinessRules;
 import kodlama.io.rentACar.business.requests.CreateBrandRequest;
 import kodlama.io.rentACar.business.requests.UpdateBrandRequest;
 import kodlama.io.rentACar.business.responses.GetAllBrandsResponse;
@@ -22,6 +23,7 @@ import lombok.AllArgsConstructor;
 public class BrandManager implements BrandService{
 	private BrandRepository brandRepository;
 	private ModelMapperService modelMapperService;
+	private BrandBusinessRules brandBusinessRules;
 	//Brand -->id, name, quantity olsun.
 	//GetAllBrandsResponse -->id, name döndürmek istersek
 	//mapping yapmamız gerekir.
@@ -43,6 +45,8 @@ public class BrandManager implements BrandService{
 		//Brand brand = new Brand();
 		//brand.setName(createBrandRequest.getName());
 		//System.out.println(createBrandRequest.getName());
+		this.brandBusinessRules.checkIfBrandNameExists(createBrandRequest.getName());
+		
 		Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 		this.brandRepository.save(brand);//brand is recorded
 		

@@ -2,6 +2,8 @@ package kodlama.io.rentACar.webApi.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,17 +22,16 @@ import kodlama.io.rentACar.business.requests.UpdateBrandRequest;
 import kodlama.io.rentACar.business.responses.GetAllBrandsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdBrandResponse;
 import kodlama.io.rentACar.entities.concretes.Brand;
+import lombok.AllArgsConstructor;
 
 @RestController //annotation for spring framework pointing this is an access point.
 @RequestMapping("/api/brands") //adressing
+@AllArgsConstructor
 public class BrandsController {
 	private BrandService brandService;
 
 	@Autowired//check parameter brandService and scan which class implements 
 	//brandservice. then get a Newed instance from that class.
-	public BrandsController(BrandService brandService) {
-		this.brandService = brandService;
-	}
 	
 	@GetMapping()
 	public List<GetAllBrandsResponse> getAll() {
@@ -44,7 +45,7 @@ public class BrandsController {
 	
 	@PostMapping()
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public void add(@RequestBody() CreateBrandRequest createBrandRequest) {
+	public void add(@RequestBody() @Valid() CreateBrandRequest createBrandRequest) {
 		this.brandService.add(createBrandRequest);
 	}
 	
